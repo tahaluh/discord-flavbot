@@ -30,7 +30,7 @@ client.on("messageCreate", async (message) => {
     return;
   }
 
-  console.log(message.content);
+  // console.log(message.content);
   if (message.content === "ping") {
     message.reply("pong");
   }

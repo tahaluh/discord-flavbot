@@ -17,9 +17,7 @@ export async function playSoundInChannel(
   const botPermissions = channel.permissionsFor(botMember);
 
   if (!botPermissions?.has(PermissionsBitField.Flags.PrioritySpeaker)) {
-    console.log(
-      "The bot does not have Priority Speaker permission. There may be issues joining full channels."
-    );
+    // console.log(      "The bot does not have Priority Speaker permission. There may be issues joining full channels."    );
   }
 
   try {
@@ -47,7 +45,7 @@ export async function playSoundInChannel(
       });
 
       player.on(AudioPlayerStatus.Idle, () => {
-        console.log("Audio playback has finished.");
+        // console.log("Audio playback has finished.");
         connection.destroy(); // Disconnect after playback ends
       });
     });

@@ -3,13 +3,15 @@ import { getChannelWithMostMembers } from "../utils/getChannelWithMostMembers";
 import { playSoundInChannel } from "../utils/playSoundInChannel";
 import { moveAllMembersToChannel } from "../utils/moveAllMembersToChannel";
 import { getTTSResource } from "../utils/getTTSResource";
+import { createAudioResource } from "@discordjs/voice";
+import { getAudioPath } from "../utils/getAssetPath";
 
 const data = new SlashCommandBuilder()
   .setName("jumpscare")
   .setDescription("Move todo mundo para a mesma call e toca um som assustador");
 
 async function execute(interaction: CommandInteraction) {
-  console.log("Jumpscare command called");
+  // console.log("Jumpscare command called");
 
   const targetChannel = await getChannelWithMostMembers(interaction.guild!);
 
@@ -21,7 +23,9 @@ async function execute(interaction: CommandInteraction) {
 
   await moveAllMembersToChannel(targetChannel);
 
-  const resource = await getTTSResource("boo", "pt-BR", false);
+  const resource = createAudioResource(
+    getAudioPath("psycho-scream-soundbible.mp3")
+  );
 
   await playSoundInChannel(targetChannel, resource);
 
