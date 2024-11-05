@@ -3,6 +3,7 @@ import { getChannelWithMostMembers } from "../utils/getChannelWithMostMembers";
 import { playSoundInChannel } from "../utils/playSoundInChannel";
 import { moveAllMembersToChannel } from "../utils/moveAllMembersToChannel";
 import { getTTSResource } from "../utils/getTTSResource";
+import { getUserVoiceChannel } from "../utils/getUserVoiceChannel";
 
 const data = new SlashCommandBuilder()
   .setName("tts")
@@ -34,7 +35,10 @@ async function execute(interaction: CommandInteraction) {
     return interaction.reply("Mensagem muito longa");
   }
 
-  const targetChannel = await getChannelWithMostMembers(interaction.guild!);
+  const targetChannel = await getUserVoiceChannel(
+    interaction.guild!,
+    interaction.user.id
+  );
 
   if (!targetChannel) {
     return interaction.editReply("Não encontrei nenhuma call ativa");

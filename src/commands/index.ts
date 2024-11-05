@@ -1,5 +1,6 @@
 import { jumpscare } from "./jumpscare";
 import { ping } from "./ping";
+import { play } from "./play";
 import { pong } from "./pong";
 import { refresh } from "./refresh";
 import { tts } from "./tts";
@@ -10,4 +11,5 @@ export const commands = {
   refresh,
   jumpscare,
   tts,
+  play,
 };

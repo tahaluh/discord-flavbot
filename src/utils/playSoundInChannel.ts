@@ -7,7 +7,6 @@ import {
   AudioResource,
 } from "@discordjs/voice";
 import { PermissionsBitField, VoiceChannel } from "discord.js";
-import { getTTSResource } from "./getTTSResource";
 
 export async function playSoundInChannel(
   channel: VoiceChannel,
