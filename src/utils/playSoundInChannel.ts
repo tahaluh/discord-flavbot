@@ -1,15 +1,18 @@
 import {
   joinVoiceChannel,
   createAudioPlayer,
-  createAudioResource,
   AudioPlayerStatus,
   VoiceConnectionStatus,
   DiscordGatewayAdapterCreator,
+  AudioResource,
 } from "@discordjs/voice";
-import { getAudioPath } from "./getAssetPath";
 import { PermissionsBitField, VoiceChannel } from "discord.js";
+import { getTTSResource } from "./getTTSResource";
 
-export async function playSoundInChannel(channel: VoiceChannel): Promise<void> {
+export async function playSoundInChannel(
+  channel: VoiceChannel,
+  resource: AudioResource
+): Promise<void> {
   // Check if the bot has Priority Speaker permission
   const botMember = await channel.guild.members.fetchMe();
   const botPermissions = channel.permissionsFor(botMember);
@@ -29,12 +32,13 @@ export async function playSoundInChannel(channel: VoiceChannel): Promise<void> {
     });
 
     // Wait for connection to be ready
-    connection.on(VoiceConnectionStatus.Ready, () => {
+    connection.on(VoiceConnectionStatus.Ready, async () => {
       // console.log("Connected to the voice channel!");
 
       // Play sound
       const player = createAudioPlayer();
-      const resource = createAudioResource(getAudioPath("lula-tira.mp3"));
+      // const resource = createAudioResource(getAudioPath("lula-tira.mp3"));
+      // const resource = await getTTSResource("Hello, world!", "en", false);
       player.play(resource);
       connection.subscribe(player);
 

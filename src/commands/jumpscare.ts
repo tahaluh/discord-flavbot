@@ -2,6 +2,7 @@ import { CommandInteraction, SlashCommandBuilder } from "discord.js";
 import { getChannelWithMostMembers } from "../utils/getChannelWithMostMembers";
 import { playSoundInChannel } from "../utils/playSoundInChannel";
 import { moveAllMembersToChannel } from "../utils/moveAllMembersToChannel";
+import { getTTSResource } from "../utils/getTTSResource";
 
 const data = new SlashCommandBuilder()
   .setName("jumpscare")
@@ -20,7 +21,9 @@ async function execute(interaction: CommandInteraction) {
 
   await moveAllMembersToChannel(targetChannel);
 
-  await playSoundInChannel(targetChannel);
+  const resource = await getTTSResource("boo", "pt-BR", false);
+
+  await playSoundInChannel(targetChannel, resource);
 
   await interaction.followUp("Boo! 👻");
 }
