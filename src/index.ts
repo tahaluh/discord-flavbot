@@ -4,7 +4,7 @@ import { commands } from "./commands";
 import { config } from "./config";
 
 const client = new Client({
-  intents: ["Guilds", "GuildMessages", "DirectMessages"],
+  intents: ["Guilds", "GuildMessages", "DirectMessages", "GuildVoiceStates"],
 });
 
 client.once("ready", () => {
@@ -28,6 +28,11 @@ client.on("interactionCreate", async (interaction) => {
 client.on("messageCreate", async (message) => {
   if (message.author.bot) {
     return;
+  }
+
+  console.log(message.content);
+  if (message.content === "ping") {
+    message.reply("pong");
   }
 
   if (message.channel.id === "1300940930336948305") {
