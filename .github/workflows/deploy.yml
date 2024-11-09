@@ -1,0 +1,39 @@
+name: Deploy to Docker Server
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t myapp:latest .
+
+      - name: Push Docker image to remote server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > /tmp/deploy_key
+          chmod 600 /tmp/deploy_key
+          scp -i /tmp/deploy_key -o StrictHostKeyChecking=no myapp:latest $SERVER_USER@$SERVER_HOST:/path/to/deploy
+
+      - name: Deploy on Remote Docker
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+        run: |
+          ssh -i /tmp/deploy_key -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "
+          docker load -i /path/to/deploy/myapp:latest &&
+          docker stop myapp || true &&
+          docker rm myapp || true &&
+          docker run -d --name myapp myapp:latest"
