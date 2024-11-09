@@ -1,21 +1,20 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
-import { deployCommands } from "./deploy-commands";
 import { getUserVoiceChannel } from "../utils/getUserVoiceChannel";
 import { getPlayDLResource } from "../utils/getPlayDLResource";
-import { playSoundInChannel } from "../utils/playSoundInChannel";
+import { audioQueue, QueueItemTypes } from "../player/audioQueue";
 
 const data = new SlashCommandBuilder()
   .setName("play")
-  .setDescription("Toca o som de uma url")
+  .setDescription("Toca o som de uma URL")
   .addStringOption((option) =>
-    option.setName("url").setDescription("A url do som").setRequired(true)
+    option.setName("url").setDescription("A URL do som").setRequired(true)
   );
 
 async function execute(interaction: CommandInteraction) {
   const url = interaction.options.get("url")!.value as string;
 
   if (!url) {
-    return interaction.reply("Url inválida");
+    return interaction.reply("URL inválida.");
   }
 
   const voiceChannel = getUserVoiceChannel(
@@ -24,17 +23,19 @@ async function execute(interaction: CommandInteraction) {
   );
 
   if (!voiceChannel) {
-    return interaction.reply("Você precisa estar em um canal de voz");
+    return interaction.reply("Você precisa estar em um canal de voz.");
   }
 
-  console.log(`Playing sound in channel ${voiceChannel.id}`);
-  console.log(`URL: ${url}`);
+  try {
+    const resource = await getPlayDLResource(url);
 
-  const resource = await getPlayDLResource(url);
+    await audioQueue.addToQueue(resource, voiceChannel, QueueItemTypes.PLAY);
 
-  await playSoundInChannel(voiceChannel, resource);
-
-  interaction.reply("Toca o som dj! 🎵");
+    interaction.reply("Adicionado à fila! 🎵");
+  } catch (error) {
+    console.error("Erro ao tentar reproduzir o som:", error);
+    interaction.reply("Ocorreu um erro ao tentar reproduzir o som.");
+  }
 }
 
 export const play = { data, execute };
