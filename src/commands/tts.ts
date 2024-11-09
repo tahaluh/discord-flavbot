@@ -42,12 +42,12 @@ async function execute(interaction: CommandInteraction) {
     return interaction.editReply("Você precisa estar em um canal de voz.");
   }
 
-  await interaction.reply("Papagaio ativado! 🦜");
+  await interaction.reply("🦜");
 
   const resource = await getTTSResource(message, language ?? "pt-BR", false);
 
   const onResourceEnd = async () => {
-    await interaction.followUp("Tá falado! 🦜");
+    await interaction.followUp("🦜");
   };
 
   await audioQueue.addToQueue(
