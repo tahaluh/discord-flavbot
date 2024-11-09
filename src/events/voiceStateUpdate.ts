@@ -24,7 +24,11 @@ export const handleVoiceStateUpdate = async (
     audioQueue.changeChannel(targetChannel!);
   };
 
-  const message = "Bem vindo, " + newState.member?.displayName;
+  const messageOptions = ["Bem vindo", "Olá", "Oi", "E aí", "Oi oi"];
+
+  const message = `${
+    messageOptions[Math.floor(Math.random() * messageOptions.length)]
+  }, ${newState.member?.displayName}!`;
   const resource = await getTTSResource(message, "pt-BR", false);
 
   audioQueue.addToQueue(
