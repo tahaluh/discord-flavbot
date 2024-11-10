@@ -1,6 +1,7 @@
 import { VoiceState } from "discord.js";
-import { audioQueue, QueueItemTypes } from "../player/audioQueue";
+import { QueueItemTypes } from "../player/audioQueue";
 import { getTTSResource } from "../utils/getTTSResource";
+import { audioQueueManager } from "../player/audioQueueManager";
 
 export const handleVoiceStateUpdate = async (
   oldState: VoiceState,
@@ -13,6 +14,8 @@ export const handleVoiceStateUpdate = async (
   if (!(!oldState.channelId && newState.channelId)) {
     return;
   }
+
+  const audioQueue = audioQueueManager.getQueue(newState.guild.id);
 
   if (!audioQueue.justWelcome()) {
     return;

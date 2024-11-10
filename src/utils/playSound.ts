@@ -1,11 +1,6 @@
-import {
-  joinVoiceChannel,
-  createAudioResource,
-  DiscordGatewayAdapterCreator,
-  AudioResource,
-} from "@discordjs/voice";
+import { createAudioResource } from "@discordjs/voice";
 import { VoiceChannel, VoiceBasedChannel } from "discord.js";
-import { audioQueue, QueueItemTypes } from "../player/audioQueue";
+import { audioQueueManager } from "../player/audioQueueManager";
 
 export async function playSoundInChannel(
   channel: VoiceChannel | VoiceBasedChannel,
@@ -14,7 +9,7 @@ export async function playSoundInChannel(
   try {
     const resource = createAudioResource(audioPath);
 
-    audioQueue.addToQueue(resource, channel);
+    audioQueueManager.getQueue(channel.guild.id).addToQueue(resource, channel);
   } catch (error) {
     console.error("Erro ao tentar conectar e reproduzir áudio:", error);
   }

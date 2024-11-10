@@ -1,9 +1,8 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
-import { getChannelWithMostMembers } from "../utils/getChannelWithMostMembers";
-import { moveAllMembersToChannel } from "../utils/moveAllMembersToChannel";
 import { getTTSResource } from "../utils/getTTSResource";
 import { getUserVoiceChannel } from "../utils/getUserVoiceChannel";
-import { audioQueue, QueueItemTypes } from "../player/audioQueue";
+import { QueueItemTypes } from "../player/audioQueue";
+import { audioQueueManager } from "../player/audioQueueManager";
 
 const data = new SlashCommandBuilder()
   .setName("tts")
@@ -50,13 +49,15 @@ async function execute(interaction: CommandInteraction) {
     await interaction.followUp("🦜");
   };
 
-  await audioQueue.addToQueue(
-    resource,
-    targetChannel,
-    QueueItemTypes.TTS,
-    undefined,
-    onResourceEnd
-  );
+  await audioQueueManager
+    .getQueue(interaction.guildId!)
+    .addToQueue(
+      resource,
+      targetChannel,
+      QueueItemTypes.TTS,
+      undefined,
+      onResourceEnd
+    );
 }
 
 export const tts = { data, execute };

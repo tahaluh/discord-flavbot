@@ -127,5 +127,3 @@ export class AudioQueue {
     return this.queue.every((item) => item.type === QueueItemTypes.WELCOME);
   }
 }
-
-export const audioQueue = new AudioQueue();

@@ -1,7 +1,8 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
 import { getUserVoiceChannel } from "../utils/getUserVoiceChannel";
 import { getPlayDLResource } from "../utils/getPlayDLResource";
-import { audioQueue, QueueItemTypes } from "../player/audioQueue";
+import { QueueItemTypes } from "../player/audioQueue";
+import { audioQueueManager } from "../player/audioQueueManager";
 
 const data = new SlashCommandBuilder()
   .setName("play")
@@ -29,7 +30,9 @@ async function execute(interaction: CommandInteraction) {
   try {
     const resource = await getPlayDLResource(url);
 
-    await audioQueue.addToQueue(resource, voiceChannel, QueueItemTypes.PLAY);
+    await audioQueueManager
+      .getQueue(interaction.guildId!)
+      .addToQueue(resource, voiceChannel, QueueItemTypes.PLAY);
 
     interaction.reply("Adicionado à fila! 🎵");
   } catch (error) {

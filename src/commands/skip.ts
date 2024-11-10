@@ -1,12 +1,12 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
-import { audioQueue } from "../player/audioQueue";
+import { audioQueueManager } from "../player/audioQueueManager";
 
 const data = new SlashCommandBuilder()
   .setName("skip")
   .setDescription("Pula o áudio atual");
 
 async function execute(interaction: CommandInteraction) {
-  audioQueue.skip();
+  audioQueueManager.getQueue(interaction.guildId!).skip();
   return interaction.reply("Pulando o áudio atual...");
 }
 
