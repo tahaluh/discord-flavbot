@@ -4,7 +4,15 @@ import { config } from "./config";
 import { events } from "./events";
 
 const client = new Client({
-  intents: ["Guilds", "GuildMessages", "DirectMessages", "GuildVoiceStates"],
+  intents: [
+    "Guilds",
+    "GuildMessages",
+    "DirectMessages",
+    "GuildVoiceStates",
+    "MessageContent",
+    "GuildMessageReactions",
+    "GuildMembers",
+  ],
 });
 
 client.once("ready", events.ready);
